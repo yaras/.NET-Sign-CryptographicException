@@ -14,6 +14,7 @@ namespace SigningTest
         [STAThread]
         static void Main(string[] args)
         {
+
             // The URI to sign.
             string resourceToSign = "http://www.microsoft.com";
 
@@ -52,7 +53,7 @@ namespace SigningTest
             }
             catch (CryptographicException e)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine(e.ToString());
 
             }
 
