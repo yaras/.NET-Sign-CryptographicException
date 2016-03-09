@@ -56,6 +56,7 @@ namespace SigningTest
 
             }
 
+            Console.ReadKey();
         }
 
         // Sign an XML file and save the signature in a new file. This method does not  
