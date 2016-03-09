@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
+using Microsoft.Win32;
 
 namespace SigningTest
 {
@@ -16,8 +17,26 @@ namespace SigningTest
         [STAThread]
         static void Main(string[] args)
         {
-            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-us");
-            Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
+			Console.WriteLine("64bit: " + Environment.Is64BitProcess);
+
+			using (RegistryKey key = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\.NETFramework\\Security", false))
+			{
+				object val = key.GetValue("SignedXmlAllowDetachedSignature");
+
+				if (val == null)
+				{
+					Console.WriteLine("SignedXmlAllowDetachedSignature: [null]");
+				}
+				else
+				{
+					Console.WriteLine("SignedXmlAllowDetachedSignature: " + val);
+				}
+				
+				Console.WriteLine("=====");
+			}
+
+			Thread.CurrentThread.CurrentCulture = new CultureInfo("en-us");
+			Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
 
             // The URI to sign.
             string resourceToSign = "http://www.microsoft.com";
