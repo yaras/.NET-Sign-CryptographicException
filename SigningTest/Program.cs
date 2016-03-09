@@ -39,7 +39,7 @@ namespace SigningTest
 			Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
 
             // The URI to sign.
-            string resourceToSign = "http://www.microsoft.com";
+			string resourceToSign = "Example.xml";
 
             // The name of the file to which to save the XML signature.
             string XmlFileName = "xmldsig.xml";
@@ -100,6 +100,8 @@ namespace SigningTest
             // Add the passed URI to the reference object.
             reference.Uri = URIString;
 
+			reference.AddTransform(CreateXPathTransform());
+
             // Add the reference to the SignedXml object.
             signedXml.AddReference(reference);
 
@@ -142,5 +144,18 @@ namespace SigningTest
             // and return the result.
             return signedXml.CheckSignature(Key);
         }
+
+		private static XmlDsigXPathTransform CreateXPathTransform(string xPathString = "ancestor-or-self::*")
+		{
+			XmlDocument doc = new XmlDocument { PreserveWhitespace = true };
+			XmlElement xPathElem = doc.CreateElement("XPath");
+
+			xPathElem.InnerText = xPathString;
+
+			XmlDsigXPathTransform xPathTransform = new XmlDsigXPathTransform();
+			xPathTransform.LoadInnerXml(xPathElem.SelectNodes("."));
+
+			return xPathTransform;
+		}
     }
 }
